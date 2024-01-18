@@ -1,31 +1,42 @@
-<!-- _delete_form.html.twig -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
-<button class="btn-delete" onclick="confirmDelete()">Supprimer</button>
-<link rel="stylesheet" href="{{ asset('../assets/styles/DeleteStyle.css') }}">
+{% extends 'base.html.twig' %}
 
-<div class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Confirmation de suppression</h2>
-            <span class="close" onclick="closeModal()">&times;</span>
-        </div>
-        <div class="modal-body">
-            <p>Êtes-vous sûr de vouloir supprimer cet utilisateur ?</p>
-            <button class="confirm-btn" onclick="deleteUser()">Oui, supprimer</button>
-            <button class="cancel-btn" onclick="closeModal()">Non, annuler</button>
+{% block title %}Confirmation de suppression{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Incluez ici le lien vers votre fichier CSS supplémentaire #}
+    <link rel="stylesheet" href="{{ asset('../assets/styles/DeleteStyle.css') }}">
+{% endblock %}
+
+{% block body %}
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700display=swap" rel="stylesheet">
+    <button class="btn-delete" onclick="confirmDelete()">Supprimer</button>
+
+    <div class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirmation de suppression</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer cet utilisateur ?</p>
+                <button class="confirm-btn" onclick="deleteUser()">Oui, supprimer</button>
+                <button class="cancel-btn" onclick="closeModal()">Non, annuler</button>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="alert-success" id="alertSuccess">
-    <div class="success-icon">✔</div>
-    <p>L'utilisateur a été supprimé avec succès.</p>
-    <div class="progress-bar" id="progressBar"></div>
-    Redirection vers la page en cours...<span class="countdown"></span>
-</div>
+    <div class="alert-success" id="alertSuccess">
+        <div class="success-icon">✔</div>
+        <p>L'utilisateur a été supprimé avec succès.</p>
+        <div class="progress-bar" id="progressBar"></div>
+        Redirection vers la page en cours...<span class="countdown"></span>
+    </div>
+{% endblock %}
 
-
+{% block javascripts %}
+    {{ parent() }}
 <script>
     function confirmDelete() {
         $('.modal').css('display', 'block');
@@ -72,3 +83,4 @@
         $('.modal').css('display', 'none');
     }
 </script>
+{% endblock %}
