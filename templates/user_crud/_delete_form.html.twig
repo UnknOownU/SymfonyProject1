@@ -1,156 +1,8 @@
 <!-- _delete_form.html.twig -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
-
-<style>
-    body {
-        margin: 0;
-        font-family: 'Nunito', sans-serif;
-        background: #f4f7f6;
-        color: #333;
-    }
-
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.6);
-    }
-
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: none;
-        width: 40%;
-        max-width: 600px;
-        border-radius: 12px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        text-align: left;
-    }
-
-    .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 10px;
-    }
-
-    .modal-header h2 {
-        margin: 0;
-    }
-
-    .close {
-        color: #888;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .close:hover {
-        color: #555;
-    }
-
-    .modal-body p {
-        font-size: 18px;
-        margin-bottom: 20px;
-    }
-
-    .confirm-btn, .cancel-btn {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin: 10px;
-        font-size: 16px;
-        transition: background-color 0.3s, transform 0.2s;
-    }
-
-    .confirm-btn {
-        background-color: #e74c3c;
-        color: white;
-    }
-
-    .confirm-btn:hover {
-        background-color: #c0392b;
-        transform: translateY(-2px);
-    }
-
-    .cancel-btn {
-        background-color: #3498db;
-        color: white;
-    }
-
-    .cancel-btn:hover {
-        background-color: #2980b9;
-        transform: translateY(-2px);
-    }
-
-    .alert-success {
-        background-color: #28a745;
-        color: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        display: none;
-        position: fixed;
-        top: 20%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        animation: fadeIn 0.5s;
-    }
-
-    .countdown {
-        font-size: 14px;
-        padding: 5px;
-        background-color: #27ae60;
-        border-radius: 4px;
-    }
-
-    .btn {
-        background-color: #3498db;
-        color: white;
-        padding: 12px 24px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s, transform 0.2s;
-    }
-
-    .btn:hover {
-        background-color: #2980b9;
-        transform: translateY(-2px);
-
-        @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    .success-icon {
-        color: #fff;
-        font-size: 24px;
-        margin-bottom: 10px;
-    }
-
-    .progress-bar {
-        background-color: #fff;
-        height: 5px;
-        width: 0;
-        transition: width 1s ease-in-out;
-    }
-
-    }
-</style>
-
-<button class="btn" onclick="confirmDelete()">Supprimer</button>
+<button class="btn-delete" onclick="confirmDelete()">Supprimer</button>
+<link rel="stylesheet" href="{{ asset('../assets/styles/DeleteStyle.css') }}">
 
 <div class="modal">
     <div class="modal-content">
@@ -190,6 +42,7 @@
                 if (data.success) {
                     var alertSuccess = $('#alertSuccess');
                     alertSuccess.css('display', 'block');
+                    console.error(data.message || 'No message provided by the server.');
 
                     var countdownElement = alertSuccess.find('.countdown');
                     var countdownValue = 3;
