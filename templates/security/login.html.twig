@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <!-- Add locally hosted jQuery script -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+{% endblock %}
+
+{% block body %}
+<form id="login-form" method="post" action="{{ path('app_login') }}">
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    {% if app.user %}
+        <div class="mb-3">
+            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+        </div>
+    {% endif %}
+
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <label for="inputEmail">Email</label>
+    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+    <label for="inputPassword">Password</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+
+    <input type="hidden" name="_csrf_token"
+           value="{{ csrf_token('authenticate') }}"
+    >
+
+    <button class="btn btn-lg btn-primary" type="button" onclick="submitForm()">
+        Sign in
+    </button>
+</form>
+
+<script>
+    function submitForm() {
+        // Get form data
+        var formData = $('#login-form').serialize();
+
+        // Make AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '{{ path('app_login') }}',
+            data: formData,
+            success: function (data) {
+                // Check the response for success or failure
+                if (data.success) {
+                    // Handle success response, e.g., redirect to a new page
+                    console.log(data.message);
+                    window.location.href = '{{ path('app_user_crud_index') }}';
+                    alert("vous êtes connecter vous allez être redirigé..")
+                } else {
+                    // Handle login failure
+                    console.error(data.message);
+                    alert('Login failed. Please check your credentials.');
+                }
+            },
+            error: function (error) {
+                // Handle error response
+                console.error(error);
+                alert('An error occurred during login.');
+            }
+        });
+    }
+</script>
+
+
+{% endblock %}

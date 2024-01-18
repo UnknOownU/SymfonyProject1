@@ -1,0 +1,153 @@
+<!-- _delete_form.html.twig -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Arial', sans-serif;
+        background: #f2f2f2;
+    }
+
+    .modal, .alert-success {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .modal {
+        width: 50%;
+        background-color: #fefefe;
+    }
+
+    .alert-success {
+        padding: 10px;
+        background-color: #5cb85c;
+        color: white;
+    }
+
+    .countdown {
+        font-size: 14px;
+        padding: 5px;
+        background-color: #4cae4c;
+        border-radius: 4px;
+    }
+
+    .btn {
+        background-color: #5bc0de;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .btn:hover {
+        background-color: #46b8da;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s ease-in-out;
+    }
+
+    .close:hover {
+        color: black;
+    }
+
+    .confirm-btn, .cancel-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 0 10px;
+        font-size: 16px;
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .confirm-btn {
+        background-color: #d9534f;
+        color: white;
+    }
+
+    .confirm-btn:hover {
+        background-color: #c9302c;
+    }
+
+    .cancel-btn {
+        background-color: #5bc0de;
+        color: white;
+    }
+
+    .cancel-btn:hover {
+        background-color: #46b8da;
+    }
+</style>
+
+<button class="btn" onclick="confirmDelete()">Supprimer</button>
+
+<div class="modal" id="deleteModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p>Êtes-vous sûr de vouloir supprimer cet utilisateur ?</p>
+        <button class="confirm-btn" onclick="deleteUser()">Oui, supprimer</button>
+        <button class="cancel-btn" onclick="closeModal()">Non, annuler</button>
+    </div>
+</div>
+
+<div class="alert-success" id="alertSuccess">
+    L'utilisateur a été supprimé avec succès. Redirection vers la page en cours...<span class="countdown"></span>
+</div>
+
+<script>
+    function confirmDelete() {
+        $('#deleteModal').css({'display': 'block', 'opacity': 1});
+    }
+
+    function deleteUser() {
+        var csrfToken = '{{ csrf_token('delete' ~ user.id) }}';
+
+        $.ajax({
+            type: 'POST',
+            url: '{{ path('app_user_crud_delete', {'id': user.id}) }}',
+            data: {'_token': csrfToken},
+            success: function (data) {
+                if (data.success) {
+                    $('#alertSuccess').css({'display': 'block', 'opacity': 1});
+                    var countdownElement = $('#alertSuccess').find('.countdown');
+                    var countdownValue = 3;
+                    var countdownInterval = setInterval(function () {
+                        countdownValue--;
+                        countdownElement.text(countdownValue);
+                        if (countdownValue <= 0) {
+                            window.location.href = '{{ path('app_user_crud_index') }}';
+                            clearInterval(countdownInterval);
+                        }
+                    }, 1000);
+                } else {
+                    console.error('Failed to delete user. ' + (data.message || 'No message provided by the server.'));
+                }
+            },
+            error: function (error) {
+                console.error('An error occurred during the AJAX request.', error);
+            }
+        });
+
+        $('#deleteModal').css({'display': 'none', 'opacity': 0});
+    }
+
+    function closeModal() {
+        $('#deleteModal').css({'display': 'none', 'opacity': 0});
+    }
+</script>
