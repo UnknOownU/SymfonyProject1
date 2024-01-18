@@ -1,118 +1,182 @@
 <!-- _delete_form.html.twig -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
     body {
         margin: 0;
-        font-family: 'Arial', sans-serif;
-        background: #f2f2f2;
-    }
-
-    .modal, .alert-success {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out;
+        font-family: 'Nunito', sans-serif;
+        background: #f4f7f6;
+        color: #333;
     }
 
     .modal {
-        width: 50%;
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-content {
         background-color: #fefefe;
-    }
-
-    .alert-success {
-        padding: 10px;
-        background-color: #5cb85c;
-        color: white;
-    }
-
-    .countdown {
-        font-size: 14px;
-        padding: 5px;
-        background-color: #4cae4c;
-        border-radius: 4px;
-    }
-
-    .btn {
-        background-color: #5bc0de;
-        color: white;
-        padding: 10px 20px;
+        margin: 15% auto;
+        padding: 20px;
         border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        width: 40%;
+        max-width: 600px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        text-align: left;
     }
 
-    .btn:hover {
-        background-color: #46b8da;
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+
+    .modal-header h2 {
+        margin: 0;
     }
 
     .close {
-        color: #aaa;
-        float: right;
+        color: #888;
         font-size: 28px;
         font-weight: bold;
         cursor: pointer;
-        transition: color 0.3s ease-in-out;
     }
 
     .close:hover {
-        color: black;
+        color: #555;
+    }
+
+    .modal-body p {
+        font-size: 18px;
+        margin-bottom: 20px;
     }
 
     .confirm-btn, .cancel-btn {
         padding: 10px 20px;
         border: none;
-        border-radius: 4px;
+        border-radius: 5px;
         cursor: pointer;
-        margin: 0 10px;
+        margin: 10px;
         font-size: 16px;
-        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        transition: background-color 0.3s, transform 0.2s;
     }
 
     .confirm-btn {
-        background-color: #d9534f;
+        background-color: #e74c3c;
         color: white;
     }
 
     .confirm-btn:hover {
-        background-color: #c9302c;
+        background-color: #c0392b;
+        transform: translateY(-2px);
     }
 
     .cancel-btn {
-        background-color: #5bc0de;
+        background-color: #3498db;
         color: white;
     }
 
     .cancel-btn:hover {
-        background-color: #46b8da;
+        background-color: #2980b9;
+        transform: translateY(-2px);
+    }
+
+    .alert-success {
+        background-color: #28a745;
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        display: none;
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        animation: fadeIn 0.5s;
+    }
+
+    .countdown {
+        font-size: 14px;
+        padding: 5px;
+        background-color: #27ae60;
+        border-radius: 4px;
+    }
+
+    .btn {
+        background-color: #3498db;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .btn:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+
+        @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .success-icon {
+        color: #fff;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .progress-bar {
+        background-color: #fff;
+        height: 5px;
+        width: 0;
+        transition: width 1s ease-in-out;
+    }
+
     }
 </style>
 
 <button class="btn" onclick="confirmDelete()">Supprimer</button>
 
-<div class="modal" id="deleteModal">
+<div class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <p>Êtes-vous sûr de vouloir supprimer cet utilisateur ?</p>
-        <button class="confirm-btn" onclick="deleteUser()">Oui, supprimer</button>
-        <button class="cancel-btn" onclick="closeModal()">Non, annuler</button>
+        <div class="modal-header">
+            <h2>Confirmation de suppression</h2>
+            <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir supprimer cet utilisateur ?</p>
+            <button class="confirm-btn" onclick="deleteUser()">Oui, supprimer</button>
+            <button class="cancel-btn" onclick="closeModal()">Non, annuler</button>
+        </div>
     </div>
 </div>
 
 <div class="alert-success" id="alertSuccess">
-    L'utilisateur a été supprimé avec succès. Redirection vers la page en cours...<span class="countdown"></span>
+    <div class="success-icon">✔</div>
+    <p>L'utilisateur a été supprimé avec succès.</p>
+    <div class="progress-bar" id="progressBar"></div>
+    Redirection vers la page en cours...<span class="countdown"></span>
 </div>
+
 
 <script>
     function confirmDelete() {
-        $('#deleteModal').css({'display': 'block', 'opacity': 1});
+        $('.modal').css('display', 'block');
     }
 
     function deleteUser() {
@@ -124,12 +188,16 @@
             data: {'_token': csrfToken},
             success: function (data) {
                 if (data.success) {
-                    $('#alertSuccess').css({'display': 'block', 'opacity': 1});
-                    var countdownElement = $('#alertSuccess').find('.countdown');
+                    var alertSuccess = $('#alertSuccess');
+                    alertSuccess.css('display', 'block');
+
+                    var countdownElement = alertSuccess.find('.countdown');
                     var countdownValue = 3;
+
                     var countdownInterval = setInterval(function () {
                         countdownValue--;
                         countdownElement.text(countdownValue);
+
                         if (countdownValue <= 0) {
                             window.location.href = '{{ path('app_user_crud_index') }}';
                             clearInterval(countdownInterval);
@@ -144,10 +212,10 @@
             }
         });
 
-        $('#deleteModal').css({'display': 'none', 'opacity': 0});
+        $('.modal').css('display', 'none');
     }
 
     function closeModal() {
-        $('#deleteModal').css({'display': 'none', 'opacity': 0});
+        $('.modal').css('display', 'none');
     }
 </script>
