@@ -25,6 +25,7 @@
                             <td>{{ user.id }}</td>
                             <td>{{ user.email }}</td>
                             <td>
+                                {{ include('user_crud/_delete_form.html.twig') }}
                                 <a href="{{ path('app_user_crud_show', {'id': user.id}) }}" class="btn btn-primary btn-sm">Gérer L'utilisateur</a>
                             </td>
                         </tr>
@@ -34,7 +35,6 @@
         {% else %}
             <p class="text-center mt-4">Aucun utilisateur trouvé.</p>
         {% endif %}
-
         <div class="text-center mt-4">
             <a href="{{ path('app_user_crud_new') }}" class="btn btn-success btn-lg">Créer un nouvel utilisateur</a>
         </div>

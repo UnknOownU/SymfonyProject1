@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
@@ -51,34 +52,26 @@ class UserCrudController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_crud_edit', methods: ['GET', 'POST'])]
-public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
-{
-    $form = $this->createForm(UserType::class, $user);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $entityManager->flush();
-
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response {
         if ($request->isXmlHttpRequest()) {
-            // Si la requête est une requête AJAX, retourner une réponse JSON
-            return $this->json(['success' => true, 'message' => 'User edited successfully']);
+            $jsonData = json_decode($request->getContent(), true);
+
+            $user->setEmail($jsonData['email'] ?? $user->getEmail());
+            if (!empty($jsonData['password'])) {
+                $user->setPassword($passwordHasher->hashPassword($user, $jsonData['password']));
+            }
+
+            $entityManager->flush();
+
+            return $this->json(['message' => 'User updated successfully']);
         }
 
-        return $this->redirectToRoute('app_user_crud_index', [], Response::HTTP_SEE_OTHER);
+        return $this->render('user_crud/edit.html.twig', [
+            'user' => $user,
+        ]);
     }
-
-    if ($request->isXmlHttpRequest() && $form->isSubmitted()) {
-        // Si la requête est une requête AJAX mais que le formulaire n'est pas valide
-        return $this->json(['success' => false, 'message' => 'Failed to edit user.']);
-    }
-
-    return $this->render('user_crud/edit.html.twig', [
-        'user' => $user,
-        'form' => $form,
-    ]);
-}
-
-
+    
+    
     #[Route('/{id}', name: 'app_user_crud_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {

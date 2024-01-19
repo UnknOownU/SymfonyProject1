@@ -4,15 +4,50 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('../assets/styles/EditStyle.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/EditStyle.css') }}">
 {% endblock %}
 
 {% block body %}
-    <div class="edit-user-container">
-        <div class="edit-user-card">
-            <h1 class="edit-user-title">Edit User</h1>
-            {{ include('user_crud/_form.html.twig', {'button_class': 'update-button', 'button_label': 'Update'}) }}
-            <a href="{{ path('app_user_crud_index') }}" class="back-link">Back to List</a>
-        </div>
+<div class="edit-user-container">
+    <div class="edit-user-card">
+        <h1 class="edit-user-title">Edit User</h1>
+        <input type="email" id="userEmail" placeholder="Email" value="{{ user.email }}" />
+        <input type="password" id="userPassword" placeholder="Password" />
+        <button type="button" id="updateButton" class="btn-update">Mettre à jour</button>
     </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+{{ parent() }}
+<script>
+$(document).ready(function() {
+    $('#updateButton').on('click', function() {
+        var emailValue = $('#userEmail').val();
+        var passwordValue = $('#userPassword').val();
+        
+        var userData = {
+            email: emailValue,
+            password: passwordValue
+        };
+
+        $.ajax({
+            url: '{{ path('app_user_crud_edit', {'id': user.id}) }}',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(userData),
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token('update' ~ user.id) }}'
+            },
+            success: function(response) {
+                alert('User updated successfully.');
+            },
+            error: function(xhr) {
+                alert('Error: ' + xhr.responseJSON.message);
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
