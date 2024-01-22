@@ -1,19 +1,46 @@
-{% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ asset('../assets/styles/Register.css') }}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
+<div class="register-container">
     <h1>Register</h1>
-
-    {{ form_errors(registrationForm) }}
-
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
+    {{ form_start(registrationForm, {'attr': {'class': 'form-register'}}) }}
+        <div class="form-group">
+            {{ form_label(registrationForm.email, 'Email') }}
+            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-input'}}) }}
+        </div>
+        <div class="form-group password-field">
+            {{ form_label(registrationForm.plainPassword, 'Password') }}
+            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-input', 'type': 'password'}}) }}
+            <span class="toggle-password" onclick="togglePasswordVisibility()"><i class="fa-solid fa-eye"></i></span>
+        </div>
+        <div class="form-group">
+            {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+            {{ form_label(registrationForm.agreeTerms, 'Agree to terms') }}
+        </div>
+        <button type="submit" class="btn-submit">Register</button>
     {{ form_end(registrationForm) }}
+</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+function togglePasswordVisibility() {
+    var passwordInput = document.querySelector('.password-field .form-input');
+    var toggleIcon = document.querySelector('.toggle-password i');
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = "password";
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+    }
+}
+
+</script>
 {% endblock %}

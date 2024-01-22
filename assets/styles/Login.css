@@ -1,0 +1,45 @@
+body {
+    background-color: #f7f7f7;
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    padding-top: 5%;
+}
+
+.form-signin {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-signin .form-control {
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.form-signin .btn-block {
+    background-color: #0056b3;
+    color: white;
+    border-radius: 5px;
+}
+
+.form-signin .btn-block:hover {
+    background-color: #003d82;
+}
+
+h1 {
+    color: #333333;
+    margin-bottom: 30px;
+}
+
+.alert {
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-top: 20%;
+    }
+}

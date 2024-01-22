@@ -1,0 +1,121 @@
+:root {
+    --background-color: #f4f4f6;
+    --text-color: #333;
+    --input-background: #ffffff;
+    --input-border: #cccccc;
+    --hover-background: #333333;
+    --button-background: #0056b3;
+    --button-hover-background: #004494;
+    --button-text-color: #ffffff;
+    --font-primary: 'Helvetica Neue', Arial, sans-serif;
+    --font-size-regular: 16px;
+    --border-radius: 5px;
+}
+
+body {
+    background: var(--background-color);
+    font-family: var(--font-primary);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+}
+
+.register-container {
+    background: var(--button-text-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    max-width: 400px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-register {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--input-border);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-regular);
+    background: var(--input-background);
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-input:focus {
+    border-color: var(--button-background);
+    box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
+    outline: none;
+}
+
+.form-check-input {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.form-check-label {
+    color: var(--text-color);
+    cursor: pointer;
+    user-select: none;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 12px 0;
+    border-radius: var(--border-radius);
+    background-color: var(--button-background);
+    color: var(--button-text-color);
+    font-size: var(--font-size-regular);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.btn-submit:hover {
+    background-color: var(--button-hover-background);
+}
+
+@media (max-width: 768px) {
+    .register-container {
+        padding: 25px;
+    }
+}
+
+.password-field {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;  
+    top: 62%;  
+    transform: translateY(-50%);
+    cursor: pointer;
+    height: 20px; 
+    font-size: 20px; 
+}
+
+
+.form-input[type="password"] {
+    padding-right: 40px; 
+}
+
